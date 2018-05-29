@@ -19,8 +19,6 @@ class Valuation:
         51.7500000, 19.4666700)
     CENTER_OF_POZNAN = GeographicalLocation.GeographicalLocation(
         52.4069200, 16.9299300)
-    CENTER_OF_SZCZECIN = GeographicalLocation.GeographicalLocation(
-        53.4289400, 14.5530200)
 
     def __init__(self):
 
@@ -29,7 +27,7 @@ class Valuation:
         self.list_Of_available_cities = [
             "Wrocław", "Warszawa", "Kraków",
             "Gdańsk", "Katowice", "Lublin", "Łódź",
-            "Poznań", "Szczecin"]
+            "Poznań"]
 
     def get_cost(self, square_meters, sq1, sq2, sq3, distance):
         if square_meters < 38:
@@ -63,25 +61,25 @@ class Valuation:
             city, square_meters, market, latitude, longitude)
         cost = float(cost)
         if garage:
-            cost += 15000
+            cost += 150000
         if furnished:
             cost *= 1.15
         if balcony:
-            cost += 5000
+            cost += 50000
         if patio:
-            cost += 5000
+            cost += 50000
         if elevator:
-            cost += 1000
+            cost += 10000
         if two_floors:
-            cost += 5000
+            cost += 50000
         if air_conditioning:
-            cost += 3000
+            cost += 30000
         if usable_room:
-            cost += 150
+            cost += 1500
         if cellar:
-            cost += 5000
+            cost += 50000
         if garden:
-            cost += 5000
+            cost += 50000
 
         if construction_year < 2000:
             cost *= 0.9
@@ -132,11 +130,7 @@ class Valuation:
                 "poznań": Valuation.get_info(
                     self, square_meters,
                     7217, 6377, 6290, latitude, longitude,
-                    self.CENTER_OF_POZNAN),
-                "szczecin": Valuation.get_info(
-                    self, square_meters,
-                    5254, 5095, 5120, latitude, longitude,
-                    self.CENTER_OF_SZCZECIN)
+                    self.CENTER_OF_POZNAN)
             }
         else:
             switcher = {
@@ -171,11 +165,7 @@ class Valuation:
                 "poznań": Valuation.get_info(
                     self, square_meters,
                     6999, 6433, 5948, latitude,
-                    longitude, self.CENTER_OF_POZNAN),
-                "szczecin": Valuation.get_info(
-                    self, square_meters,
-                    5502, 4909, 4711, latitude,
-                    longitude, self.CENTER_OF_SZCZECIN)
+                    longitude, self.CENTER_OF_POZNAN)
             }
         return switcher.get(city, "nothing")
 
