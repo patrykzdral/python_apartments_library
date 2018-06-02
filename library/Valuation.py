@@ -1,3 +1,5 @@
+from exception.illegalArgumentException import IllegalArgumentException
+from exception.marketNotExistException import MarketNotExistsException
 from library import GeographicalLocation
 
 
@@ -19,6 +21,8 @@ class Valuation:
         51.7500000, 19.4666700)
     CENTER_OF_POZNAN = GeographicalLocation.GeographicalLocation(
         52.4069200, 16.9299300)
+    CENTER_OF_SZCZECIN = GeographicalLocation.GeographicalLocation(
+        53.4289400, 14.5530200)
 
     def __init__(self):
 
@@ -55,31 +59,35 @@ class Valuation:
                                   balcony, usable_room, garage, cellar,
                                   garden, patio, elevator, two_floors,
                                   air_conditioning, market):
+
+        if square_meters<0 or construction_year<0:
+            raise (IllegalArgumentException("Parametry wejściowe nie mogą mieć wartości ujemnej"))
+
         self.cost = 0
         city.lower()
         cost = self.numbers_to_strings(
             city, square_meters, market, latitude, longitude)
         cost = float(cost)
         if garage:
-            cost += 150000
-        if furnished:
-            cost *= 1.15
+            cost += 15000
         if balcony:
-            cost += 50000
+            cost += 5000
         if patio:
-            cost += 50000
+            cost += 5000
         if elevator:
-            cost += 10000
+            cost += 1000
         if two_floors:
-            cost += 50000
+            cost += 5000
         if air_conditioning:
-            cost += 30000
+            cost += 3000
         if usable_room:
             cost += 1500
         if cellar:
-            cost += 50000
+            cost += 5000
         if garden:
-            cost += 50000
+            cost += 5000
+        if furnished:
+            cost *= 1.15
 
         if construction_year < 2000:
             cost *= 0.9
@@ -87,7 +95,7 @@ class Valuation:
             cost *= 0.95
         elif 2010 < construction_year < 2015:
             cost *= 1.05
-        else:
+        elif construction_year >= 2015:
             cost *= 1.1
 
         return "{0:.2f}".format(round(cost, 2))
@@ -95,8 +103,9 @@ class Valuation:
     def numbers_to_strings(self, city, square_meters,
                            market, latitude, longitude):
 
+        if not (["pierwotny", "wtórny"].__contains__(market)):
+            raise (MarketNotExistsException("Rynek nie istnieje"))
         city = city.lower()
-        print(city)
         if market == "pierwotny":
             switcher = {
                 "wrocław": Valuation.get_info(
@@ -130,7 +139,11 @@ class Valuation:
                 "poznań": Valuation.get_info(
                     self, square_meters,
                     7217, 6377, 6290, latitude, longitude,
-                    self.CENTER_OF_POZNAN)
+                    self.CENTER_OF_POZNAN),
+                "szczecin": Valuation.get_info(
+                    self, square_meters,
+                    5254, 5095, 5120, latitude, longitude,
+                    self.CENTER_OF_SZCZECIN)
             }
         else:
             switcher = {
@@ -165,15 +178,17 @@ class Valuation:
                 "poznań": Valuation.get_info(
                     self, square_meters,
                     6999, 6433, 5948, latitude,
-                    longitude, self.CENTER_OF_POZNAN)
+                    longitude, self.CENTER_OF_POZNAN),
+                "szczecin": Valuation.get_info(
+                    self, square_meters,
+                    5502, 4909, 4711, latitude,
+                    longitude, self.CENTER_OF_SZCZECIN)
             }
         return switcher.get(city, "nothing")
 
     def get_info(self, square_meters, sq1, sq2,
                  sq3, latitude, longitude, lat_lon_city):
-        print(latitude)
-        print(longitude)
-        print(lat_lon_city)
+
         distance = GeographicalLocation.GeographicalLocation(
             latitude, longitude).distance_to(lat_lon_city)
         cost = self.get_cost(square_meters, sq1, sq2, sq3, distance)
