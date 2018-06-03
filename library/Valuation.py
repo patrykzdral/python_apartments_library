@@ -31,7 +31,7 @@ class Valuation:
         self.list_Of_available_cities = [
             "Wrocław", "Warszawa", "Kraków",
             "Gdańsk", "Katowice", "Lublin", "Łódź",
-            "Poznań"]
+            "Poznań","Szczecin"]
 
     def get_cost(self, square_meters, sq1, sq2, sq3, distance):
         if square_meters < 38:
