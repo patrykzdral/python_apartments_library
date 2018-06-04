@@ -1,3 +1,4 @@
+import time
 import unittest
 
 import exception
@@ -7,7 +8,16 @@ from library.Valuation import Valuation
 
 
 class TestSimple(unittest.TestCase):
+    clock_start = None
+    clock_end = None
+    execution_clock = None
 
+    def setUp(self):
+        self.clock_start = time.time()
+
+    def tearDown(self):
+        self.clock_end = time.time()
+        self.execution_clock = self.clock_end - self.clock_start
 
     def test_address_not_found(self):
         calc = GoogleSearcher()
@@ -37,11 +47,11 @@ class TestSimple(unittest.TestCase):
 
         with self.assertRaises(exception.illegalArgumentException.IllegalArgumentException) as context:
             valuation.estimate_cost_of_the_flat(51.094053, 16.983384,
-                                                    -120, "Wrocław",
-                                                    2005, False,
-                                                    False, False, False, False,
-                                                    False, False, False, False,
-                                                    False, "wtórny")
+                                                -120, "Wrocław",
+                                                2005, False,
+                                                False, False, False, False,
+                                                False, False, False, False,
+                                                False, "wtórny")
 
         self.assertTrue('Parametry wejściowe nie mogą mieć wartości ujemnej' in str(context.exception))
 
@@ -78,13 +88,13 @@ class TestSimple(unittest.TestCase):
                                                                                     False, False, False, False,
                                                                                     False, "wtórny")
         price_after_change_construction_year = valuation.estimate_cost_of_the_flat(51.094053, 16.983384,
-                                                                                    100, "Wrocław",
-                                                                                    2006, False,
-                                                                                    False, False, False, False,
-                                                                                    False, False, False, False,
-                                                                                    False, "wtórny")
+                                                                                   100, "Wrocław",
+                                                                                   2006, False,
+                                                                                   False, False, False, False,
+                                                                                   False, False, False, False,
+                                                                                   False, "wtórny")
         self.assertEqual(float(price_before_change_construction_year),
-                         float(price_after_change_construction_year)*0.9)
+                         float(price_after_change_construction_year) * 0.9)
 
 
 if __name__ == '__main__':
