@@ -96,6 +96,30 @@ class TestSimple(unittest.TestCase):
         self.assertEqual(float(price_before_change_construction_year),
                          float(price_after_change_construction_year) * 0.9)
 
+    def test_that_should_not_pass(self):
+        valuation = Valuation()
+
+        price = valuation.estimate_cost_of_the_flat(51.094053, 16.983384,
+                                                    100, "Wrocław",
+                                                    1998, False,
+                                                    False, False, False, False,
+                                                    False, False, False, False,
+                                                    False, "wtórny")
+
+        self.assertEqual(price,
+                         1000)
+
+
+def suite():
+    test_suite = unittest.TestSuite()
+    test_suite.addTest(unittest.makeSuite(TestSimple))
+    return test_suite
+
 
 if __name__ == '__main__':
-    unittest.main()
+    import xmlrunner
+
+    mainTestSuite = unittest.TestSuite()
+    mainTestSuite.addTest(suite())
+    testRunner = xmlrunner.XMLTestRunner(verbosity=2, output='test-reports')
+    testRunner.run(mainTestSuite)

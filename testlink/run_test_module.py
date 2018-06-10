@@ -67,7 +67,7 @@ class JsonTestResult(TextTestResult):
                     (test.clock_start).strftime('%Y-%m-%d %H:%M:%S:%f'),
                     'when_clock_ended': "-",
                     'time_of_execution': "-",
-                    'status_of_testCase': "blocked"
+                    'status_of_testCase': "failed"
                 }}
             out[suite][FAIL].append(unit_test)
         elif result is ERROR:
@@ -77,7 +77,7 @@ class JsonTestResult(TextTestResult):
                     (test.clock_start).strftime('%Y-%m-%d %H:%M:%S:%f'),
                     'when_clock_ended': "-",
                     'time_of_execution': "-",
-                    'status_of_testCase': "failed"
+                    'status_of_testCase': "blocked"
                 }}
             out[suite][ERROR].append(json_unit)
         elif result is SKIP:
@@ -133,6 +133,15 @@ if __name__ == '__main__':
         TESTLINK_API_PYTHON_DEVKEY = "de221c3415cd566478274bbbe51ea42b"
         tlh = testlink.TestLinkHelper(TESTLINK_API_PYTHON_SERVER_URL, TESTLINK_API_PYTHON_DEVKEY)
         tls = testlink.TestlinkAPIClient(tlh._server_url, tlh._devkey, verbose=False)
+        print("")
+        print("Number of Projects      in TestLink: %s " % tls.countProjects())
+        print("Number of Platforms  (in TestPlans): %s " % tls.countPlatforms())
+        print("Number of Builds                   : %s " % tls.countBuilds())
+        print("Number of TestPlans                : %s " % tls.countTestPlans())
+        print("Number of TestSuites               : %s " % tls.countTestSuites())
+        print("Number of TestCases (in TestPlans) : %s " % tls.countTestCasesTP())
+        print("")
+
         project_name = tls.getTestProjectByName("test of apartments application")['prefix']
 
         project_test_plan_id = \
@@ -147,7 +156,7 @@ if __name__ == '__main__':
             tc_id = tls.getTestCaseIDByName(list(ok.keys())[0])[0]['id']
             tls.reportTCResult(tc_id, project_test_plan_id, None, 'p',
                                'test executed successfully. Started at: ' + str(
-                                   list(ok.values())[0]['when_clock_started']) + ".More details in attached file",
+                                   list(ok.values())[0]['when_clock_started']) + ". More details in attached json file",
                                guess=True,
                                testcaseexternalid=str(project_name) + "-" + str(tc_info[0]['tc_external_id']),
                                platformname='Python 3',
@@ -164,7 +173,7 @@ if __name__ == '__main__':
             tc_id = tls.getTestCaseIDByName(list(fail.keys())[0])[0]['id']
 
             tls.reportTCResult(tc_id, project_test_plan_id, None, 'f', 'test executed with fail. Started at: ' + str(
-                list(fail.values())[0]['when_clock_started']) + ".More details in attached file", guess=True,
+                list(fail.values())[0]['when_clock_started']) + ". More details in attached json file", guess=True,
                                testcaseexternalid=str(project_name) + "-" + str(tc_info[0]['tc_external_id']),
                                platformname='Python 3',
                                execduration=list(fail.values())[0][
@@ -179,7 +188,7 @@ if __name__ == '__main__':
             tc_info = tls.getTestCaseIDByName(list(error.keys())[0])
             tc_id = tls.getTestCaseIDByName(list(error.keys())[0])[0]['id']
             tls.reportTCResult(tc_id, project_test_plan_id, None, 'b', 'test executed with error.' + str(
-                list(error.values())[0]['when_clock_started']) + ".More details in attached file", guess=True,
+                list(error.values())[0]['when_clock_started']) + ". More details in attached json file", guess=True,
                                testcaseexternalid=str(project_name) + "-" + str(tc_info[0]['tc_external_id']),
                                platformname='Python 3',
                                execduration=list(error.values())[0][
