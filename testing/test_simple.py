@@ -101,4 +101,4 @@ class TestSimple(unittest.TestCase):
 if __name__ == '__main__':
     import xmlrunner
 
-    unittest.main(testRunner=xmlrunner.XMLTestRunner(verbosity=2, output='test-reports'))
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(verbosity=2, output='tests-xml-results'))
