@@ -98,16 +98,12 @@ class TestSimple(unittest.TestCase):
 
 
 
-def suite():
-    test_suite = unittest.TestSuite()
-    test_suite.addTest(unittest.makeSuite(TestSimple))
-    return test_suite
-
-
 if __name__ == '__main__':
     import xmlrunner
 
+    test_suite = unittest.TestSuite()
+    test_suite.addTest(unittest.makeSuite(TestSimple))
     mainTestSuite = unittest.TestSuite()
-    mainTestSuite.addTest(suite())
+    mainTestSuite.addTest(test_suite)
     testRunner = xmlrunner.XMLTestRunner(verbosity=2, output='test-reports')
     testRunner.run(mainTestSuite)
